@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Feliz Aniversário</title>
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        html, body {
+          height: 100%;
+          width: 100%;
+          font-family: 'Arial', sans-serif;
+          background: url('fotos/foto1.png') no-repeat center center;
+          background-size: cover;
+          overflow-x: hidden;
+          overflow-y: auto;
+        }
+
+        canvas {
+          position: fixed;
+          top: 0;
+          left: 0;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        #intro {
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          background: transparent;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          z-index: 2;
+          text-align: center;
+        }
+
+        #intro h2 {
+          color: white;
+          font-size: 1.5em;
+          margin-bottom: 20px;
+          text-shadow: 0 0 10px #000;
+        }
+
+        .start-btn {
+          background: rgba(255, 255, 255, 0.1);
+          border: 2px solid white;
+          color: white;
+          padding: 10px 20px;
+          font-size: 1.2em;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: background 0.3s;
+        }
+
+        .start-btn:hover {
+          background: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+          position: relative;
+          width: 100%;
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 40px 20px 60px;
+          color: white;
+          z-index: 1;
+          display: none;
+        }
+
+        .container.show {
+          display: block;
+          animation: fadeIn 2s ease-in-out;
+        }
+
+        .container h1 {
+          font-size: 1.6em;
+          margin-bottom: 15px;
+          text-align: center;
+          text-shadow: 0 0 10px #000;
+        }
+
+        .rain-text span {
+          display: block;
+          font-size: 1.2em;
+          margin: 15px 0;
+          text-align: center;
+          opacity: 0;
+          transform: translateY(-20px);
+          transition: opacity 5s ease, transform 5s ease;
+        }
+
+        .rain-text span.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .photo {
+          display: block;
+          margin: 40px auto;
+          width: 100%;
+          max-width: 400px;
+          border-radius: 15px;
+          box-shadow: 0 0 10px black;
+          opacity: 0;
+          transform: translateY(40px);
+          transition: opacity 5s ease, transform 5s ease;
+        }
+
+        .photo.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+<canvas id="starfield"></canvas>
+
+<div id="intro">
+    <h2>Feliz aniversário, meu amor! 🎂✨</h2>
+    <button class="start-btn" id="startBtn" aria-label="Começar">▶ Começar</button>
+</div>
+
+<div class="container" id="mainContent">
+    <h1>🌙 Que seu dia seja tão incrível quanto você!</h1>
+    <div class="rain-text">
+        <span>Você é o sol e a lua,</span>
+        <span>ilumina meus dias</span>
+        <span>e torna tudo mais bonito ✨</span>
+    </div>
+    <img class="photo" src="fotos/foto2.jpg" alt="Foto 2" />
+    <img class="photo" src="fotos/foto3.jpg" alt="Foto 3" />
+    <img class="photo" src="fotos/foto4.jpg" alt="Foto 4" />
+    <div class="rain-text">
+        <span>Obrigada por ser tão incrível,</span>
+        <span>e por iluminar minha vida!</span>
+    </div>
+</div>
+
+<script>
+    // Efeito de estrelas
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function createStars() {
+      stars = [];
+      for (let i = 0; i < 150; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2,
+          speed: Math.random() * 0.5 + 0.1
+        });
+      }
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'white';
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+        star.y += star.speed;
+        if (star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
+      });
+      requestAnimationFrame(animateStars);
+    }
+
+    resizeCanvas();
+    createStars();
+    animateStars();
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      createStars();
+    });
+
+    // Clique do botão
+    document.getElementById('startBtn').addEventListener('click', () => {
+      document.getElementById('intro').style.display = 'none';
+      document.getElementById('mainContent').classList.add('show');
+    });
+
+    // Animação ao rolar
+    function handleScrollReveal() {
+      const spans = document.querySelectorAll('.rain-text span');
+      const photos = document.querySelectorAll('.photo');
+
+      spans.forEach(span => {
+        const rect = span.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 50) {
+          span.classList.add('visible');
+        }
+      });
+
+      photos.forEach(photo => {
+        const rect = photo.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 50) {
+          photo.classList.add('visible');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', handleScrollReveal);
+    window.addEventListener('load', handleScrollReveal);
+</script>
+</body>
+</html>
