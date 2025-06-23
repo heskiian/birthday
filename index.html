@@ -70,8 +70,8 @@
           position: relative;
           width: 100%;
           max-width: 600px;
-          margin: 0 auto;
-          padding: 40px 20px 60px;
+          margin: 100px auto;
+          padding: 40px 20px 100px;
           color: white;
           z-index: 1;
           display: none;
@@ -121,6 +121,19 @@
           transform: translateY(0);
         }
 
+        #spotify-player {
+          display: none;
+          position: fixed;
+          top: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 999;
+          background: rgba(0, 0, 0, 0.5);
+          padding: 4px;
+          border-radius: 12px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
@@ -130,11 +143,22 @@
 <body>
 <canvas id="starfield"></canvas>
 
+<!-- Intro -->
 <div id="intro">
     <h2>Feliz aniversário, meu amor! 🎂✨</h2>
     <button class="start-btn" id="startBtn" aria-label="Começar">▶ Começar</button>
 </div>
 
+<!-- Spotify Player -->
+<div id="spotify-player">
+    <iframe style="border-radius:12px"
+            src="https://open.spotify.com/embed/track/656TZu3G6rnfK9m2Y0zR6g?utm_source=generator"
+            width="300" height="80" frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+</div>
+
+<!-- Conteúdo Principal -->
 <div class="container" id="mainContent">
     <h1>🌙 Que seu dia seja tão incrível quanto você!</h1>
     <div class="rain-text">
@@ -152,7 +176,7 @@
 </div>
 
 <script>
-    // Efeito de estrelas
+    // Estrelas animadas
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -198,13 +222,14 @@
       createStars();
     });
 
-    // Clique do botão
+    // Ao clicar no botão "Começar"
     document.getElementById('startBtn').addEventListener('click', () => {
       document.getElementById('intro').style.display = 'none';
       document.getElementById('mainContent').classList.add('show');
+      document.getElementById('spotify-player').style.display = 'block';
     });
 
-    // Animação ao rolar
+    // Revelar texto/foto ao rolar
     function handleScrollReveal() {
       const spans = document.querySelectorAll('.rain-text span');
       const photos = document.querySelectorAll('.photo');
