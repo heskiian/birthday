@@ -70,8 +70,8 @@
           position: relative;
           width: 100%;
           max-width: 600px;
-          margin: 100px auto;
-          padding: 40px 20px 100px;
+          margin: 0 auto;
+          padding: 40px 20px 60px;
           color: white;
           z-index: 1;
           display: none;
@@ -80,6 +80,10 @@
         .container.show {
           display: block;
           animation: fadeIn 2s ease-in-out;
+        }
+
+        .container.margin-top {
+          margin-top: 100px;
         }
 
         .container h1 {
@@ -121,44 +125,37 @@
           transform: translateY(0);
         }
 
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
         #spotify-player {
-          display: none;
           position: fixed;
           top: 10px;
           left: 50%;
           transform: translateX(-50%);
-          z-index: 999;
-          background: rgba(0, 0, 0, 0.5);
-          padding: 4px;
-          border-radius: 12px;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          z-index: 9999;
         }
     </style>
 </head>
 <body>
 <canvas id="starfield"></canvas>
 
-<!-- Intro -->
+<div id="spotify-player">
+    <iframe style="border-radius:12px"
+            src="https://open.spotify.com/embed/track/7tLWVURa0HVEVTnb9z9aNc?utm_source=generator&theme=0"
+            width="300" height="80" frameBorder="0" allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy">
+    </iframe>
+</div>
+
 <div id="intro">
     <h2>Feliz aniversário, meu amor! 🎂✨</h2>
     <button class="start-btn" id="startBtn" aria-label="Começar">▶ Começar</button>
 </div>
 
-<!-- Spotify Player -->
-<div id="spotify-player">
-    <iframe style="border-radius:12px"
-            src="https://open.spotify.com/embed/track/656TZu3G6rnfK9m2Y0zR6g?utm_source=generator"
-            width="300" height="80" frameBorder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"></iframe>
-</div>
-
-<!-- Conteúdo Principal -->
 <div class="container" id="mainContent">
     <h1>🌙 Que seu dia seja tão incrível quanto você!</h1>
     <div class="rain-text">
@@ -176,7 +173,7 @@
 </div>
 
 <script>
-    // Estrelas animadas
+    // Efeito de estrelas
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -222,14 +219,15 @@
       createStars();
     });
 
-    // Ao clicar no botão "Começar"
+    // Clique do botão
     document.getElementById('startBtn').addEventListener('click', () => {
       document.getElementById('intro').style.display = 'none';
-      document.getElementById('mainContent').classList.add('show');
-      document.getElementById('spotify-player').style.display = 'block';
+      const main = document.getElementById('mainContent');
+      main.classList.add('show');
+      main.classList.add('margin-top');
     });
 
-    // Revelar texto/foto ao rolar
+    // Animação ao rolar
     function handleScrollReveal() {
       const spans = document.querySelectorAll('.rain-text span');
       const photos = document.querySelectorAll('.photo');
